@@ -1,0 +1,7 @@
+# UAT test accounts for OTP login: mobile,dob (yyyy-MM-dd)
+# Copy this file to test-accounts.csv (same folder) and replace the rows with real UAT test accounts.
+# test-accounts.csv is git-ignored: real mobile numbers and dates of birth must never be committed.
+# Used in rotation, least recently used first (usage kept in test-output/account-usage.properties).
+# UAT ignores Login via OTP for a number that had several OTPs in a short time, so rotation matters.
+9000000001,1990-01-01
+9000000002,1985-06-15

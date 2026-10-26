@@ -1,0 +1,8 @@
+target/
+test-output/
+bin/
+.settings/
+
+# Real UAT test accounts (mobile numbers, dates of birth): keep local only.
+# Copy src/test/resources/testdata/test-accounts.example.csv to test-accounts.csv and fill it in.
+src/test/resources/testdata/test-accounts.csv

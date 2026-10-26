@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  Sprint 1 test cases on Android and iOS emulation:  ./mvnw test -Dsuite=sprint1
+    BD2M-576  Launch Icon & Splash Screen                 (sprint1/LaunchIconSplashTests)
+    BD2M-672  Pre-Login / Login Screen                    (sprint1/LoginScreenTests)
+    BD2M-669  Dashboard - Home Tab (logged-in user)       (sprint1/HomeTabTests)
+  One story only:            -Dgroups=BD2M-672
+  Leave out manual cases:    -DexcludedGroups=non-automatable
+  No real OTP SMS:           -DexcludedGroups=otp   (BD2M-669 still needs one OTP login per platform)
+  OTP logins wait for the tester to type the OTP into test-output/otp.txt.
+-->
+<!-- time-out: any single test running over 5 minutes is failed, so a hung test cannot freeze the run -->
+<suite name="Sprint 1" time-out="300000" configfailurepolicy="continue">
+
+    <test name="Android - Chrome emulation">
+        <parameter name="platform" value="ANDROID_CHROME_EMULATION"/>
+        <packages>
+            <package name="sprint1"/>
+        </packages>
+    </test>
+
+    <test name="iOS - Safari (WebKit) emulation">
+        <parameter name="platform" value="IOS_SAFARI_EMULATION"/>
+        <packages>
+            <package name="sprint1"/>
+        </packages>
+    </test>
+</suite>

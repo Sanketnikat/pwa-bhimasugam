@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  Every sprint's test cases in real Chrome on the Android emulator (or a USB phone).
+  Start the emulator first (Android Studio > Device Manager, or `emulator -avd Pixel_API_35`), then:
+    ./mvnw test -Dsuite=android-emulator
+    ./mvnw test -Dsuite=android-emulator -Dgroups=BD2M-576
+-->
+<suite name="Android emulator" time-out="300000" configfailurepolicy="continue">
+
+    <test name="Android emulator - Chrome">
+        <parameter name="platform" value="ANDROID_CHROME_DEVICE"/>
+        <packages>
+            <package name="sprint1"/>
+        </packages>
+    </test>
+</suite>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pwa</groupId>
+    <artifactId>pwa.automation</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>PWA Automation Framework</name>
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Standard Playwright; the browserstack profile below swaps in BrowserStack's fork -->
+        <playwright.groupId>com.microsoft.playwright</playwright.groupId>
+        <playwright.version>1.64.0</playwright.version>
+        <testng.version>7.12.0</testng.version>
+        <slf4j.version>2.0.20</slf4j.version>
+        <extentreports.version>5.1.2</extentreports.version>
+
+        <surefire.version>3.5.2</surefire.version>
+        <compiler.plugin.version>3.13.0</compiler.plugin.version>
+
+        <!-- Suite from src/test/resources/suites to run: ./mvnw test -Dsuite=sprint1 -->
+        <suite>regression</suite>
+
+        <!-- Optional command-line overrides; empty means "use config.properties / the suite file" -->
+        <platform></platform>
+        <base.url></base.url>
+        <headless></headless>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${playwright.groupId}</groupId>
+            <artifactId>playwright</artifactId>
+            <version>${playwright.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extentreports.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/suites/${suite}.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <!-- Pass -Dplatform / -Dbase.url / -Dheadless through to the forked test JVM -->
+                    <systemPropertyVariables>
+                        <platform>${platform}</platform>
+                        <base.url>${base.url}</base.url>
+                        <headless>${headless}</headless>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!--
+          Real Android phones on BrowserStack (platform BROWSERSTACK_ANDROID). BrowserStack's Playwright fork adds
+          android().connect, which standard Playwright lacks. Credentials only from the environment:
+            export BROWSERSTACK_USERNAME=... BROWSERSTACK_ACCESS_KEY=...
+            PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./mvnw clean test -Pbrowserstack -Dplatform=BROWSERSTACK_ANDROID -Dtest=LoginScreenTests#tc002_loginHeading
+          Run `./mvnw clean ...` without -Pbrowserstack afterwards, so local runs compile against standard Playwright again.
+        -->
+        <profile>
+            <id>browserstack</id>
+            <properties>
+                <playwright.groupId>com.browserstack</playwright.groupId>
+                <playwright.version>1.52.1</playwright.version>
+            </properties>
+        </profile>
+    </profiles>
+</project>
